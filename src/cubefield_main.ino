@@ -159,7 +159,7 @@ int ability_val = 24;
 int val_x;
 
 
-// {height, x-pos}
+
 int blocks[][2] = {
   {0,2},{0,9},{0,12},
   {1,4},{1,11},
@@ -234,9 +234,9 @@ void setup() {
 ISR(TIMER1_COMPA_vect){
   cli();
 
-  // S
+  // Spielroutine
   if(game_over == 0){
-    if(slowdown_left > 0){
+    if(slowdown_left > 0){  // Fähigkeit aktiv
       if(slowdown_left > DELAY){
         slowdown_left = slowdown_left - DELAY;
         ability_meter = slowdown_left*PIXELS_Y / SLOWDOWN_MS;
@@ -247,10 +247,10 @@ ISR(TIMER1_COMPA_vect){
     }
 
     if(tick_count == 0){
-      if(ability_up_frames == 0 && ability_meter < 16 && slowdown_left <= 0){
+      if(ability_up_frames == 0 && ability_meter < 16 && slowdown_left <= 0){   // erhöhen der Fähigkeits-progress-bar
         ability_meter++;
         setPixelAt(15, ability_meter-1, ability_hue, ability_sat, ability_val);
-        FastLED.show(); // Problem??????????????????????????????????????????????????????????????????????????????????????????????
+        //FastLED.show();
         ability_up_frames = ABILITY_UP_FRAMES;
 
 
@@ -258,14 +258,13 @@ ISR(TIMER1_COMPA_vect){
       ability_up_frames = (ability_up_frames-1) % ABILITY_UP_FRAMES;
 
       clearPlayingBoard();
-      //FastLED.show();
 
       val_x = (512-analogRead(A3)) / 256;
 
       int coll = showCubes();
       changePlayerPos(val_x);
 
-      if(coll) fail();
+      if(coll) fail();  // game over
 
       FastLED.show();
 
@@ -292,6 +291,7 @@ ISR(TIMER1_COMPA_vect){
   }
 
 
+  // ticks hochzählen
   tick_count = (tick_count + 1) % (game_frame_ms / DELAY);
 
   sei();
