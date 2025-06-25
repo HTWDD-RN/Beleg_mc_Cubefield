@@ -1,3 +1,5 @@
+// Aufbau: https://wokwi.com/projects/434766848991859713
+
 #include <FastLED.h>
 #include <LiquidCrystal.h>
 #include <EEPROM.h>
